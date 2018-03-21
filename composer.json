@@ -1,0 +1,33 @@
+{
+  "name": "shov/fillable",
+  "description": "Fillable trait is mixin makes any object (usually DTO) fillable for several easy ways",
+  "keywords": [
+    "fillable",
+    "fill dto",
+    "data transfer object",
+    "presenter",
+    "laravel",
+    "php"
+  ],
+  "type": "library",
+  "require": {
+    "php": ">=7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~6.0",
+    "symfony/var-dumper": "^4.0"
+  },
+  "license": "BSD-2-Clause",
+  "authors": [
+    {
+      "name": "Alexandr Shevchenko",
+      "email": "ls.shov@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Shov\\Helpers\\Mixins\\": "src"
+    }
+  }
+}

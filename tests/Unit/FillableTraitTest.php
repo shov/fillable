@@ -120,6 +120,23 @@ class FillableTraitTest extends TestCase
     /**
      * @test
      */
+    public function selfArrayPartialTest()
+    {
+        //Arrange
+        $mock = $this->getMock();
+        $mock->bar = 143;
+
+        //Act
+        $mock = $mock->fillPropsBy(['foo' => 'test', 'X_X', false]);
+
+        //Assert
+        $this->assertSame('test', $mock->foo);
+        $this->assertSame(143, $mock->bar);
+    }
+
+    /**
+     * @test
+     */
     public function selfObjectMagicTest()
     {
         //Arrange
@@ -511,6 +528,52 @@ class FillableTraitTest extends TestCase
             $this->assertSame(1422, $mock->bar);
         }
     }
+
+    /**
+     * @test
+     * @dataProvider wrongsOnlyQueryTestDataProvider
+     */
+    public function wrongsOnlyQueryTest($value)
+    {
+        //Assert
+        $this->expectException(\InvalidArgumentException::class);
+
+        //Act
+        $this->getMock()->only($value);
+    }
+
+    public function wrongsOnlyQueryTestDataProvider()
+    {
+        return [
+            [666],
+            [666.666],
+            [false],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider wrongsExcludeQueryTestDataProvider
+     */
+    public function wrongsExcludeQueryTest($value)
+    {
+        //Assert
+        $this->expectException(\InvalidArgumentException::class);
+
+        //Act
+        $this->getMock()->exclude($value);
+    }
+
+    public function wrongsExcludeQueryTestDataProvider()
+    {
+        return [
+            [666],
+            [666.666],
+            [false],
+        ];
+    }
+
+
 
     protected function getMock()
     {

@@ -15,6 +15,7 @@ trait FillableTrait
 
     /**
      * Fill host by given entity
+     * skip the query
      * @param array|object|mixed $source
      * @param string $name
      * @param bool $dynamicProps
@@ -55,12 +56,15 @@ trait FillableTrait
             }
         }
 
+        $this->skipQuery();
+
         return $this;
     }
 
     /**
      * Fill host by given entity, aggressive trying
      * to fetch only properties which host need
+     * skip the query
      * @param $source
      * @param null $default
      * @return self
@@ -101,6 +105,8 @@ trait FillableTrait
                 $this->{$key} = $value;
             }
         }
+
+        $this->skipQuery();
 
         return $this;
     }

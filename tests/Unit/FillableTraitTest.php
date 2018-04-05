@@ -408,6 +408,110 @@ class FillableTraitTest extends TestCase
         }
     }
 
+    /**
+     * @test
+     */
+    public function afterQueryTest()
+    {
+        $mocks = [];
+
+        //Arrange
+        $mock = $this->getMock();
+
+        $arr = ['foo' => 'test', 'bar' => '142', 'X_X', false];
+        $obj = (object)$arr;
+
+        $arr2 = ['foo' => 'test2', 'bar' => '1422', 'X_X2', true];
+        $obj2 = (object)$arr2;
+
+        //Act
+        $mocks[] = (clone $mock)
+            ->only(['bar'])
+            ->fillBy($arr)
+            ->fillBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->only(['bar'])
+            ->fillPropsBy($arr)
+            ->fillPropsBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->only(['bar'])
+            ->fillBy($obj)
+            ->fillBy($obj2);
+
+        $mocks[] = (clone $mock)
+            ->only(['bar'])
+            ->fillPropsBy($obj)
+            ->fillPropsBy($obj2);
+
+        $mocks[] = (clone $mock)
+            ->only('bar')
+            ->fillBy($arr)
+            ->fillBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->only('bar')
+            ->fillPropsBy($arr)
+            ->fillPropsBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->only('bar')
+            ->fillBy($obj)
+            ->fillBy($obj2);
+
+        $mocks[] = (clone $mock)
+            ->only('bar')
+            ->fillPropsBy($obj)
+            ->fillPropsBy($obj2);
+
+        $mocks[] = (clone $mock)
+            ->exclude(['foo'])
+            ->fillBy($arr)
+            ->fillBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->exclude(['foo'])
+            ->fillPropsBy($arr)
+            ->fillPropsBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->exclude(['foo'])
+            ->fillBy($obj)
+            ->fillBy($obj2);
+
+        $mocks[] = (clone $mock)
+            ->exclude(['foo'])
+            ->fillPropsBy($obj)
+            ->fillPropsBy($obj2);
+
+        $mocks[] = (clone $mock)
+            ->exclude('foo')
+            ->fillBy($arr)
+            ->fillBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->exclude('foo')
+            ->fillPropsBy($arr)
+            ->fillPropsBy($arr2);
+
+        $mocks[] = (clone $mock)
+            ->exclude('foo')
+            ->fillBy($obj)
+            ->fillBy($obj2);
+
+        $mocks[] = (clone $mock)
+            ->exclude('foo')
+            ->fillPropsBy($obj)
+            ->fillPropsBy($obj2);
+
+        //Assert
+        foreach ($mocks as $mock) {
+            $this->assertSame('test2', $mock->foo);
+            $this->assertSame(1422, $mock->bar);
+        }
+    }
+
     protected function getMock()
     {
         return new class()

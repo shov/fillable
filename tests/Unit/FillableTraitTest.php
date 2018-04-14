@@ -573,7 +573,43 @@ class FillableTraitTest extends TestCase
         ];
     }
 
+    /**
+     * @test
+     */
+    public function getSourceValueWithGetter()
+    {
+        //Arrange
+        $mock = $this->getMock();
+        $source = new class ()
+        {
+            protected $foo = 'xxx';
+            protected $bar = 42;
 
+            /**
+             * @return mixed
+             */
+            public function getFoo()
+            {
+                return $this->foo;
+            }
+
+            /**
+             * @return mixed
+             */
+            public function getBar()
+            {
+                return $this->bar * 2;
+            }
+        };
+
+        //Act
+        $mock->fillPropsBy($source);
+
+        //Assert
+        $this->assertSame('xxx', $mock->foo);
+        $this->assertSame(84, $mock->bar);
+
+    }
 
     protected function getMock()
     {

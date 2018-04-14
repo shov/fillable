@@ -88,11 +88,11 @@ trait FillableTrait
 
             //Magic methods handling
             if (is_object($source)) {
+                $getterName = 'get' . ucfirst($key);
+                $getter = [$source, $getterName];
 
-                $getterName = [$source, 'get' . ucfirst($key)];
-
-                if (is_callable($getterName)) {
-                    $value = call_user_func($getterName);
+                if (is_callable($getter) && method_exists($source, $getterName)) {
+                    $value = call_user_func($getter);
                 } else {
                     $value = $source->{$key} ?? $default;
                 }

@@ -582,16 +582,8 @@ class FillableTraitTest extends TestCase
         $mock = $this->getMock();
         $source = new class ()
         {
-            protected $foo = 'xxx';
+            public $foo = 'xxx';
             protected $bar = 42;
-
-            /**
-             * @return mixed
-             */
-            public function getFoo()
-            {
-                return $this->foo;
-            }
 
             /**
              * @return mixed
@@ -599,6 +591,16 @@ class FillableTraitTest extends TestCase
             public function getBar()
             {
                 return $this->bar * 2;
+            }
+
+            /**
+             * @param $_
+             * @param $__
+             * @return mixed
+             */
+            public function __call($_, $__)
+            {
+                return 'O_O';
             }
         };
 

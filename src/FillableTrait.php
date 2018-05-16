@@ -41,10 +41,11 @@ trait FillableTrait
                 continue;
             }
 
-            $setterName = [$this, 'set' . ucfirst($key)];
+            $setterMethod = $this
+                ->buildCamelCaseMethodCallback('set', $key);
 
-            if (is_callable($setterName)) {
-                call_user_func($setterName, $value);
+            if (is_callable($setterMethod)) {
+                call_user_func($setterMethod, $value);
 
             } else {
                 if (in_array($key, $publicFields) || $dynamicProps) {
@@ -88,11 +89,12 @@ trait FillableTrait
 
             //Magic methods handling
             if (is_object($source)) {
-                $getterName = 'get' . ucfirst($key);
-                $getter = [$source, $getterName];
+                $getterMethod = $this
+                    ->buildCamelCaseMethodCallback('get', $key, $source);
+                $getterName = $getterMethod[1];
 
-                if (is_callable($getter) && method_exists($source, $getterName)) {
-                    $value = call_user_func($getter);
+                if (is_callable($getterMethod) && method_exists($source, $getterName)) {
+                    $value = call_user_func($getterMethod);
                 } else {
                     $value = $source->{$key} ?? $default;
                 }
@@ -105,10 +107,11 @@ trait FillableTrait
                 continue;
             }
 
-            $setterName = [$this, 'set' . ucfirst($key)];
+            $setterMethod = $this
+                ->buildCamelCaseMethodCallback('set', $key);
 
-            if (is_callable($setterName)) {
-                call_user_func($setterName, $value);
+            if (is_callable($setterMethod)) {
+                call_user_func($setterMethod, $value);
             } else {
                 $this->{$key} = $value;
             }
@@ -192,5 +195,21 @@ trait FillableTrait
         }
 
         return true;
+    }
+
+    /**
+     * @param string $prefix
+     * @param string $key
+     * @param null|object $source
+     * @return callable|array
+     */
+    protected function buildCamelCaseMethodCallback($prefix, $key, $source = null)
+    {
+        $source = is_null($source) ? $this : $source;
+        return [$source, $prefix . ucfirst(implode('',
+                array_map(function ($word) {
+                    return ucfirst($word);
+                }, explode('_', $key))
+            ))];
     }
 }
